@@ -1,0 +1,34 @@
+{
+    "yunyuzhang11": {
+        "WeightHistory": 
+        {
+            "2022-04-09 12:00:00":
+                {
+                    "timestamp": "2022-04-09 12:00:00",
+                    "weightValue": 8.5,
+                    "catName": "Haybe"
+                },
+            "2022-04-09 18:00:00":
+                {
+                    "timestamp": "2022-04-09 18:00:00",
+                    "weightValue": 9.0,
+                    "catName": "Haybe"
+                }
+        },
+        "UsageHistory":
+        {
+            "2022-04-09 10:00:00":
+                {
+                    "timestamp": "2022-04-09 10:00:00",
+                    "eventType": "poop",
+                    "catName": "Haybe"
+                }, 
+            "2022-04-09 16:00:00": 
+                {
+                    "timestamp": "2022-04-09 16:00:00",
+                    "eventType": "pee",
+                    "catName": "Haybe"
+                }
+        }
+    }
+}
