@@ -10,13 +10,15 @@ class WebServer:
     def __init__(self):
         self.app = Flask(__name__)
 
+        self.userID = "yunyuzhang11"
+
         self.testJson = [
             { 'name': 'Forrest', 'amount': 5000 }
         ]
 
         self.generateURL()
         self.initFirebase()
-        # self.fbtest()
+        self.upload_to_firebase()
 
        
     def generateURL(self):
@@ -48,6 +50,7 @@ class WebServer:
         weight = request.args.get('value')
         timestamp = request.args.get('timestamp')
         catName = request.args.get('catName')
+
         return f'Current weight: {weight}, {timestamp}, {catName}'
 
     def receive_usage(self):
@@ -57,6 +60,13 @@ class WebServer:
         return f'{timestamp}, {cat_name}, {usageType}'
 
     def upload_to_firebase(self):
+        newData = {
+                    "timestamp": "2022-07-16 11:11:11",
+                    "eventType": "poop",
+                    "catName": "Haybe"
+                }
+        ref = db.reference("/" + self.userID).child("UsageHistory")
+        ref.child("2022-07-16 11:11:11").set(newData)
         return
 
     def run(self):
