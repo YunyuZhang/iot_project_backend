@@ -1,34 +1,38 @@
 {
-    "yunyuzhang11": {
-        "WeightHistory": 
-        {
-            "2022-04-09 12:00:00":
-                {
-                    "timestamp": "2022-04-09 12:00:00",
-                    "weightValue": 8.5,
-                    "catName": "Haybe"
-                },
-            "2022-04-09 18:00:00":
-                {
-                    "timestamp": "2022-04-09 18:00:00",
-                    "weightValue": 9.0,
-                    "catName": "Haybe"
-                }
-        },
-        "UsageHistory":
-        {
-            "2022-04-09 10:00:00":
-                {
-                    "timestamp": "2022-04-09 10:00:00",
-                    "eventType": "poop",
-                    "catName": "Haybe"
-                }, 
-            "2022-04-09 16:00:00": 
-                {
-                    "timestamp": "2022-04-09 16:00:00",
-                    "eventType": "pee",
-                    "catName": "Haybe"
-                }
+    "testUser": {
+      "WeightHistory": {
+        "2022-04-09,12:12:12": {
+          "catName": "Haybe",
+          "timestamp": "2022-04-09,12:12:12",
+          "weightValue": "20"
         }
+      }
+    },
+    "yunyuzhang11": {
+      "UsageHistory": {
+        "2022-04-09 10:00:00": {
+          "catName": "Haybe",
+          "eventType": "poop",
+          "timestamp": "2022-04-09,10:00:00"
+        },
+        "2022-04-09 16:00:00": {
+          "catName": "Haybe",
+          "eventType": "pee",
+          "timestamp": "2022-04-09,16:00:00"
+        }
+      },
+      "WeightHistory": {
+        "2022-04-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2022-04-09,12:00:00",
+          "weightValue": 8.5
+        },
+        "2022-04-09 18:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2022-04-09,18:00:00",
+          "weightValue": 9
+        }
+      }
     }
-}
+  }
+  
