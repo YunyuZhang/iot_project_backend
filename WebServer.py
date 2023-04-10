@@ -12,15 +12,14 @@ class LogType(Enum):
     USAGE = "UsageHistory"
 
 class WebServer:
+
     def __init__(self):
         self.app = Flask(__name__)
-
         self.testJson = [
             { 'name': 'Forrest', 'message': "Server is running" }
         ]
         self.generateURL()
         self.initFirebase()
-        self.populateData()
 
        
     def generateURL(self):
@@ -78,6 +77,16 @@ class WebServer:
     def run(self):
         self.app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 
+    def get_app(self):
+        return self.app
+
+# creat app for gunicorn
+def create_app():
+    my_app = WebServer()
+    return my_app.get_app()
+
 if __name__ == "__main__":
     my_app = WebServer()
     my_app.run()
+
+
