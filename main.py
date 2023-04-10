@@ -43,8 +43,6 @@ class WebServer:
         ref.set(content)
         print(ref.get())
 
-        
-
     def test(self):
         return jsonify(self.testJson)
 
@@ -56,8 +54,8 @@ class WebServer:
             "catName": request.args.get('catName'),
         }
         userID =  request.args.get('userID')
-        self.upload_to_firebase(LogType.WEIGHT, dataDict, userID)
-        return dataDict
+        resposne = self.upload_to_firebase(LogType.WEIGHT, dataDict, userID)
+        return resposne
 
     def receive_usage(self):
         dataDict = {
@@ -66,13 +64,16 @@ class WebServer:
             "catName": request.args.get('catName'),
         }
         userID =  request.args.get('userID')
-        self.upload_to_firebase(LogType.USAGE, dataDict, userID)
-        return dataDict
+        response = self.upload_to_firebase(LogType.USAGE, dataDict, userID)
+        return response
 
     def upload_to_firebase(self, logType, dataDict, userID):
-        ref = db.reference("/" + userID).child(logType.value)
-        ref.child(dataDict["timestamp"]).set(dataDict)
-        return logType.value + " uploaded to DB"
+        try:
+            ref = db.reference("/" + userID).child(logType.value)
+            ref.child(dataDict["timestamp"]).set(dataDict)
+            return "log successfully uploaded to DB"
+        except Exception as e:
+            return "Falied to log data: ", e
 
     def run(self):
         self.app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
