@@ -26,6 +26,8 @@ class WebServer:
         self.app.route("/")(self.test)
         self.app.route('/weight', methods=['GET'])(self.receive_weight)
         self.app.route('/usage', methods=['GET'])(self.receive_usage)
+        self.app.route('/getWeight', methods=['GET'])(self.download_weight)
+        self.app.route('/getUsage', methods=['GET'])(self.download_usage)
 
     def initFirebase(self):
         cred = credentials.Certificate("config/iotprojectbackendtest-firebase-adminsdk-rzhc2-80855871ed.json")
@@ -65,14 +67,29 @@ class WebServer:
         userID =  request.args.get('userID')
         response = self.upload_to_firebase(LogType.USAGE, dataDict, userID)
         return response
-
+    
+    def download_weight(self):
+        return self.read_from_firebase(LogType.WEIGHT, request.args.get('userID'))
+    
+    def download_usage(self):
+        return self.read_from_firebase(LogType.USAGE, request.args.get('userID'))
+        
     def upload_to_firebase(self, logType, dataDict, userID):
         try:
             ref = db.reference("/" + userID).child(logType.value)
             ref.child(dataDict["timestamp"]).set(dataDict)
             return "log successfully uploaded to DB"
         except Exception as e:
-            return "Falied to log data: ", e
+            return "Falied to upload data: ", e
+    
+    def read_from_firebase(self, logType, userID):
+        try:
+            ref = db.reference("/" + userID).child(logType.value)
+            data = ref.get()
+            return data
+        except Exception as e:
+            return "Falied to download data: ", e
+
 
     def run(self):
         self.app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
