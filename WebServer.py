@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -49,38 +49,62 @@ class WebServer:
 
     def receive_weight(self):
         
-        dataDict = {
-            "weightValue": request.args.get('value'),
-            "timestamp": request.args.get('timestamp'),
-            "catName": request.args.get('catName'),
-        }
-        userID =  request.args.get('userID')
-        resposne = self.upload_to_firebase(LogType.WEIGHT, dataDict, userID)
-        return resposne
+        try:
+            dataDict = {
+                "weightValue": request.args.get('value'),
+                "timestamp": request.args.get('timestamp'),
+                "catName": request.args.get('catName'),
+            }
+            userID =  request.args.get('userID')
+            message = self.upload_to_firebase(LogType.WEIGHT, dataDict, userID)
+            response = self.generate_response(200, message)
+            return response
+        except Exception as e:
+            response = self.generate_response(500, e)
+            return response
 
     def receive_usage(self):
-        dataDict = {
-            "usageType": request.args.get('usageType'),
-            "timestamp": request.args.get('timestamp'),
-            "catName": request.args.get('catName'),
-        }
-        userID =  request.args.get('userID')
-        response = self.upload_to_firebase(LogType.USAGE, dataDict, userID)
-        return response
+        try:
+            dataDict = {
+                "usageType": request.args.get('usageType'),
+                "timestamp": request.args.get('timestamp'),
+                "catName": request.args.get('catName'),
+            }
+            userID =  request.args.get('userID')
+            message = self.upload_to_firebase(LogType.USAGE, dataDict, userID)
+            response = self.generate_response(200, message)
+            return response
+        except Exception as e:
+            response = self.generate_response(500, e)
+            return response
+        
     
     def download_weight(self):
-        return self.read_from_firebase(LogType.WEIGHT, request.args.get('userID'))
+        try: 
+            response_body = self.read_from_firebase(LogType.WEIGHT, request.args.get('userID'))
+            response = self.generate_response(200, response_body)
+            return response
+        except Exception as e:
+            response = self.generate_response(505, "Error occured when downloading weight")
+            return response
+
     
     def download_usage(self):
-        return self.read_from_firebase(LogType.USAGE, request.args.get('userID'))
-        
+        try: 
+            message = self.read_from_firebase(LogType.USAGE, request.args.get('userID'))
+            response = self.generate_response(200, message)
+            return response
+        except Exception as e:
+            response =  self.generate_response(505, "Error occured when downloading usage")
+            return response
+    
     def upload_to_firebase(self, logType, dataDict, userID):
         try:
             ref = db.reference("/" + userID).child(logType.value)
             ref.child(dataDict["timestamp"]).set(dataDict)
-            return "log successfully uploaded to DB"
+            return "Successfully upload the log to DB"
         except Exception as e:
-            return "Falied to upload data: ", e
+            return e
     
     def read_from_firebase(self, logType, userID):
         try:
@@ -89,6 +113,10 @@ class WebServer:
             return data
         except Exception as e:
             return "Falied to download data: ", e
+    
+    def generate_response(self, status_code, message):
+        response = make_response({"response_body": message}, status_code)
+        return response
 
 
     def run(self):
