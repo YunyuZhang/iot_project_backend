@@ -6,6 +6,13 @@
           "timestamp": "2022-04-09,12:12:12",
           "weightValue": "20"
         }
+      },
+      "UsageHistory": {
+        "2022-04-09 10:00:00": {
+          "catName": "Cat Test",
+          "eventType": "poop",
+          "timestamp": "2022-04-09,10:00:00"
+        }
       }
     },
     "yunyuzhang11": {
@@ -19,18 +26,68 @@
           "catName": "Haybe",
           "eventType": "pee",
           "timestamp": "2022-04-09,16:00:00"
+        },
+        "2023-04-16 10:00:00": {
+          "catName": "Haybe",
+          "eventType": "pee",
+          "timestamp": "2023-04-16,10:00:00"
+        },
+        "2023-04-16 14:00:00": {
+          "catName": "Haybe",
+          "eventType": "pee",
+          "timestamp": "2023-04-16,14:00:00"
+        },
+        "2023-04-16 19:00:00": {
+          "catName": "Haybe",
+          "eventType": "poop",
+          "timestamp": "2023-04-16,19:00:00"
+        },
+        "2023-04-17 11:00:00": {
+          "catName": "Haybe",
+          "eventType": "pee",
+          "timestamp": "2023-04-17,11:00:00"
+        },
+        "2023-04-17 16:00:00": {
+          "catName": "Haybe",
+          "eventType": "poop",
+          "timestamp": "2023-04-17,16:00:00"
         }
       },
       "WeightHistory": {
+        "2022-11-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2022-11-09,12:00:00",
+          "weightValue": 8
+        }, 
+        "2022-12-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2022-12-09,12:00:00",
+          "weightValue": 10
+        },
+        "2023-01-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2023-01-09,12:00:00",
+          "weightValue": 11
+        },
+        "2023-02-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2023-02-09,12:00:00",
+          "weightValue": 13
+        },
+        "2023-03-09 12:00:00": {
+          "catName": "Haybe",
+          "timestamp": "2023-03-09,12:00:00",
+          "weightValue": 15
+        },
         "2022-04-09 12:00:00": {
           "catName": "Haybe",
           "timestamp": "2022-04-09,12:00:00",
-          "weightValue": 8.5
+          "weightValue": 16
         },
         "2022-04-09 18:00:00": {
           "catName": "Haybe",
           "timestamp": "2022-04-09,18:00:00",
-          "weightValue": 9
+          "weightValue": 16.5
         }
       }
     }

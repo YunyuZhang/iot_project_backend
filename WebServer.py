@@ -20,6 +20,7 @@ class WebServer:
         ]
         self.generateURL()
         self.initFirebase()
+        # self.populateData()
 
        
     def generateURL(self):
