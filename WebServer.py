@@ -122,16 +122,15 @@ class WebServer:
         return response
     
     def notifty_usage(self):
-        title = request.json['title']
-        body_message = request.json['bodyMessage']
-        status_code, response = self.send_notification(title, body_message)
+        
+        status_code, response = self.send_notification(request)
 
         if status_code == 200:
             return self.generate_response(status_code, "Successfully sent notification")
         else:
             return self.generate_response(status_code, "Fail to send notification") 
     
-    def send_notification(self, title, body_message):
+    def send_notification(self, request):
 
         with open('config/fcm_keys.json') as f:
             keys = json.load(f)
@@ -143,7 +142,12 @@ class WebServer:
         'Authorization': 'key=' + serverToken,
         }
 
-        notification_body = self.generate_notification_content(deviceToken, title, body_message)
+
+        title = request.json['title']
+        subtitle = request.json['subtitle']
+        body_message = request.json['bodyMessage']
+
+        notification_body = self.generate_notification_content(deviceToken, title, subtitle, body_message)
 
         response = requests.post("https://fcm.googleapis.com/fcm/send",headers = headers, data=json.dumps(notification_body))
         print(response.status_code)
@@ -151,9 +155,11 @@ class WebServer:
 
         return response.status_code, response.json()
     
-    def generate_notification_content(self, deviceToken, titleMessage, bodyMessage):
+    def generate_notification_content(self, deviceToken, title, subtitle, bodyMessage):
+        
         body = {
-          'notification': {'title': titleMessage,
+          'notification': {'title': title,
+                           'subtitle': subtitle,
                             'body': bodyMessage
                             },
           'to': deviceToken,
