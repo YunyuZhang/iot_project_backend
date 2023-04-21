@@ -4,6 +4,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import json
+import requests
 from enum import Enum
 
 
@@ -29,6 +30,7 @@ class WebServer:
         self.app.route('/usage', methods=['GET'])(self.receive_usage)
         self.app.route('/getWeight', methods=['GET'])(self.download_weight)
         self.app.route('/getUsage', methods=['GET'])(self.download_usage)
+        self.app.route('/notify', methods=['POST'])(self.notifty_usage)
 
     def initFirebase(self):
         cred = credentials.Certificate("config/iotprojectbackendtest-firebase-adminsdk-rzhc2-80855871ed.json")
@@ -118,6 +120,47 @@ class WebServer:
     def generate_response(self, status_code, message):
         response = make_response({"response_body": message}, status_code)
         return response
+    
+    def notifty_usage(self):
+        title = request.json['title']
+        body_message = request.json['bodyMessage']
+        status_code, response = self.send_notification(title, body_message)
+
+        if status_code == 200:
+            return self.generate_response(status_code, "Successfully sent notification")
+        else:
+            return self.generate_response(status_code, "Fail to send notification") 
+    
+    def send_notification(self, title, body_message):
+
+        with open('config/fcm_keys.json') as f:
+            keys = json.load(f)
+        deviceToken = keys["deviceToken"]
+        serverToken = keys["serverToken"]
+        
+        headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'key=' + serverToken,
+        }
+
+        notification_body = self.generate_notification_content(deviceToken, title, body_message)
+
+        response = requests.post("https://fcm.googleapis.com/fcm/send",headers = headers, data=json.dumps(notification_body))
+        print(response.status_code)
+        print(response.json())
+
+        return response.status_code, response.json()
+    
+    def generate_notification_content(self, deviceToken, titleMessage, bodyMessage):
+        body = {
+          'notification': {'title': titleMessage,
+                            'body': bodyMessage
+                            },
+          'to': deviceToken,
+          'priority': 'high',
+        }
+
+        return body
 
 
     def run(self):
