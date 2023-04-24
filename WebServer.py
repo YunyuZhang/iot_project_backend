@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, render_template
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -31,6 +31,8 @@ class WebServer:
         self.app.route('/getWeight', methods=['GET'])(self.download_weight)
         self.app.route('/getUsage', methods=['GET'])(self.download_usage)
         self.app.route('/notify', methods=['POST'])(self.notifty_usage)
+        self.app.route('/wifitest', methods=['GET'])(self.test_wifi)
+
 
     def initFirebase(self):
         cred = credentials.Certificate("config/iotprojectbackendtest-firebase-adminsdk-rzhc2-80855871ed.json")
@@ -129,7 +131,6 @@ class WebServer:
             return self.generate_response(status_code, "Successfully sent notification")
         else:
             return self.generate_response(status_code, "Fail to send notification") 
-    
     def send_notification(self, request):
 
         with open('config/fcm_keys.json') as f:
@@ -153,7 +154,15 @@ class WebServer:
         print(response.status_code)
         print(response.json())
 
-        return response.status_code, response.json()
+        json_response = response.json()
+        failure_count = json_response.get('failure', 0)
+        if failure_count > 0:
+            status_code = 400  # Bad Request
+        else:
+            status_code = 200  # OK
+
+        return status_code, json_response
+
     
     def generate_notification_content(self, deviceToken, title, subtitle, bodyMessage):
         
@@ -167,6 +176,10 @@ class WebServer:
         }
 
         return body
+    
+
+    def test_wifi(self):
+        return render_template("wifi_setup.html")
 
 
     def run(self):
