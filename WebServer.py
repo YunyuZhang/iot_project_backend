@@ -71,7 +71,7 @@ class WebServer:
     def receive_usage(self):
         try:
             dataDict = {
-                "usageType": request.args.get('usageType'),
+                "eventType": request.args.get('eventType'),
                 "timestamp": request.args.get('timestamp'),
                 "catName": request.args.get('catName'),
             }
